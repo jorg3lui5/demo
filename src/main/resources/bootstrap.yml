@@ -1,0 +1,13 @@
+spring:
+  cloud:
+    kubernetes:
+      enabled: false
+  application:
+    name: demo
+  main:
+    allow-bean-definition-overriding: on
+    lazy-initialization: on
+info:
+  project:
+    name: demo
+    version: 1.0

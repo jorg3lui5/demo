@@ -1,0 +1,134 @@
+buildscript {
+	dependencies {
+		classpath "org.openapitools:openapi-generator-gradle-plugin:4.3.0"
+		classpath "net.linguica.gradle:maven-settings-plugin:0.5"
+	}
+}
+plugins {
+	id 'java'
+	id "jacoco"
+	id 'org.springframework.boot' version '2.5.5'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id "org.openapi.generator" version "4.3.1"
+	id "net.linguica.maven-settings" version "0.5"
+}
+
+springBoot {
+	mainClass = 'com.test.demo.OpenAPI2SpringBoot'
+}
+
+apply plugin: 'java'
+apply plugin: 'org.openapi.generator'
+apply plugin: 'net.linguica.maven-settings'
+
+
+group = 'com.test'
+version = '1.0.0'
+sourceCompatibility = '11'
+
+ext {
+	mapstructVersion = "1.4.2.Final"
+	lombokVersion = "1.18.12"
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+	mavenLocal()
+}
+
+dependencies {
+
+	compileOnly "org.mapstruct:mapstruct:${mapstructVersion}", "org.projectlombok:lombok:${lombokVersion}"
+	annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}", "org.projectlombok:lombok:${lombokVersion}"
+	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+	//dependency Base
+	implementation group: 'org.mapstruct', name: 'mapstruct', version: '1.4.2.Final'
+
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	implementation "io.swagger.parser.v3:swagger-parser:2.0.20"
+	implementation "org.openapitools:jackson-databind-nullable:0.2.1"
+	implementation group: 'io.springfox', name: 'springfox-core', version: '3.0.0'
+	implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.11'
+	implementation 'junit:junit:4.13.1'
+	annotationProcessor 'org.projectlombok:lombok'
+	implementation 'io.vavr:vavr:0.9.0'
+
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'io.projectreactor:reactor-test'
+
+	//logs
+	implementation 'net.logstash.logback:logstash-logback-encoder:6.4'
+	implementation 'ch.qos.logback:logback-classic:1.2.10'
+	implementation 'ch.qos.logback.contrib:logback-jackson:0.1.5'
+	implementation 'ch.qos.logback.contrib:logback-json-classic:0.1.5'
+
+	// JDBC Reactive
+	implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+	//sql-server
+	implementation 'io.r2dbc:r2dbc-postgresql:0.8.0.RELEASE'
+	runtimeOnly 'io.r2dbc:r2dbc-spi:0.8.0.RELEASE'
+	runtimeOnly 'org.postgresql:postgresql:42.3.1'
+	implementation 'org.springframework.data:spring-data-r2dbc:1.3.1'
+
+	//liquibase
+	implementation "org.liquibase:liquibase-core"
+	runtimeOnly 'org.springframework:spring-jdbc'
+
+	testImplementation 'io.projectreactor:reactor-test'
+
+}
+
+task buildSpringServer(type: org.openapitools.generator.gradle.plugin.tasks.GenerateTask) {
+	generatorName = "spring"
+	inputSpec = "$rootDir/src/main/resources/openapi.yaml".toString()
+	outputDir = "$buildDir/generated".toString()
+	apiPackage = "com.test.demo.server"
+	modelPackage = "com.test.demo.server.models"
+	library = "spring-boot"
+	configOptions = [
+			serializableModel                       : "true",
+			dateLibrary                             : "java8",
+			openApiNullable                         : "false",
+			reactive                                : "true",
+			apiFirst                                : "false",
+			delegatePattern                         : "true",
+			configPackage                           : "com.test.demo.config",
+			sourceFolder                            : "src/main/java",
+			basePackage                             : "com.test.demo",
+			disallowAdditionalPropertiesIfNotPresent: "true"
+	]
+}
+
+compileJava.dependsOn buildSpringServer
+compileJava {
+	options.compilerArgs += [
+			'-Amapstruct.suppressGeneratorTimestamp=true',
+			'-Amapstruct.suppressGeneratorVersionInfoComment=true',
+			'-Amapstruct.verbose=true',
+			'-Amapstruct.defaultComponentModel=spring'
+	]
+}
+
+
+sourceSets.main.java.srcDirs = ["$buildDir/generated/src/main/java", "src/main/java"]
+
+test {
+	useJUnitPlatform()
+	finalizedBy jacocoTestReport
+}
+
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
+
+ext['log4j2.version'] = '2.17.1'

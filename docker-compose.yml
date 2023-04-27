@@ -1,20 +1,21 @@
-version: '3.8'
+version: '3'
 services:
+  db:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=username
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=database
+    volumes:
+      - ./data:/var/lib/postgresql/data
+
   app:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
       - 8080:8080
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:r2dbc:postgresql://ec2-3-234-204-26.compute-1.amazonaws.com:5432/d1pvtspeuckn4b?sslMode=require
-      SPRING_DATASOURCE_USERNAME: qlrzobvooadkdf
-      SPRING_DATASOURCE_PASSWORD: ff0f67f75c39512c0aa5e2cc2df5ad90e5d791a8984bc8cbc5b912d65d64a0d4
-  db:
-    image: postgres:latest
-    ports:
-      - 5432:5432
-    environment:
-      POSTGRES_USER: qlrzobvooadkdf
-      POSTGRES_PASSWORD: ff0f67f75c39512c0aa5e2cc2df5ad90e5d791a8984bc8cbc5b912d65d64a0d4
-      POSTGRES_DB: d1pvtspeuckn4b
+    depends_on:
+      - db

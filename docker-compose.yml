@@ -6,8 +6,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - 8080:8080
-    depends_on:
-      - db
     environment:
       SPRING_DATASOURCE_URL: jdbc:r2dbc:postgresql://ec2-3-234-204-26.compute-1.amazonaws.com:5432/d1pvtspeuckn4b?sslMode=require
       SPRING_DATASOURCE_USERNAME: qlrzobvooadkdf

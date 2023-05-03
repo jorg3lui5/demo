@@ -8,6 +8,7 @@ import com.test.demo.server.models.PostClienteRequest;
 import com.test.demo.server.models.PutClienteRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -59,5 +60,14 @@ public class ClientesApiDelegateImpl implements ClientesApiDelegate {
         return clientesService.putCliente(putClienteRequest)
                 .map(ResponseEntity::ok);
     }
+
+    @Override
+    public Mono<ResponseEntity<Void>> deleteCliente(Long clienteId,
+                                             ServerWebExchange exchange) {
+        return clientesService.deleteCliente(clienteId)
+                .map(ResponseEntity::ok);
+
+    }
+
 
 }

@@ -22,6 +22,8 @@ public interface CuentasService {
 
     Mono<Void> putCuenta(Mono<PutCuentaRequest> putCuentaRequest);
 
+    Mono<Void> deleteCuenta(Long cuentaId);
+
     Flux<ReporteCuentasClienteResponse> getReporteCuentasCliente(Long clienteId,
                                                                  LocalDate fechaInicio,
                                                                  LocalDate fechaFin);

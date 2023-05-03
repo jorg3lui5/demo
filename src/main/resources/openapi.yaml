@@ -81,6 +81,65 @@ paths:
             application/json;charset=UTF-8:
               schema:
                 $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+        - Cliente
+      summary: elimina el cliente por id
+      description: |
+        ### Detalle:
+        elimina el cliente por id
+         | Expected Result  | Path Parameter | Query Parameter                 |
+        | ---------------- | ------------   | -----------------------------------|
+        | elimina un cliente por id| - | clientId |
+      operationId: deleteCliente
+      parameters:
+        - name: clienteId
+          in: path
+          description: Id del cliente
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1234423
+      responses:
+        "200":
+          description: Cliente eliminado satisfactoriamente
+        "400":
+          description: 400 Bad Request. The request information it's not correct.
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: 401 Unauthorized.You're not authorized to perform this operation.
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "403":
+          description: 403 Forbidden. You don't have the right permissions to execute this operation.
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: 404 Not Found. The server cannot find the requested resource.
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "500":
+          description: 500 Internal Server Error. An error has occurred.
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "502":
+          description: 502 Bad Gateway. The service unable to get a valid response.
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Error'
   /clientes:
     get:
       tags:
@@ -314,6 +373,65 @@ paths:
             application/json;charset=UTF-8:
               schema:
                 $ref: '#/components/schemas/GetCuentaResponse'
+        "400":
+          description: 400 Bad Request. The request information it's not correct.
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: 401 Unauthorized.You're not authorized to perform this operation.
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "403":
+          description: 403 Forbidden. You don't have the right permissions to execute this operation.
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: 404 Not Found. The server cannot find the requested resource.
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "500":
+          description: 500 Internal Server Error. An error has occurred.
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "502":
+          description: 502 Bad Gateway. The service unable to get a valid response.
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+        - Cuenta
+      summary: elimina la cuenta por id
+      description: |
+        ### Detalle:
+        Elimina la cuenta por id
+         | Expected Result  | Path Parameter | Query Parameter                 |
+        | ---------------- | ------------   | -----------------------------------|
+        | elimina una cuenta por id| - | cuentaId |
+      operationId: deleteCuenta
+      parameters:
+        - name: cuentaId
+          in: path
+          description: Id de la cuenta
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1234423
+      responses:
+        "200":
+          description: Cuenta eliminada satisfactoriamente
         "400":
           description: 400 Bad Request. The request information it's not correct.
           content:
@@ -663,6 +781,65 @@ paths:
             application/json;charset=UTF-8:
               schema:
                 $ref: '#/components/schemas/GetMovimientoResponse'
+        "400":
+          description: 400 Bad Request. The request information it's not correct.
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: 401 Unauthorized.You're not authorized to perform this operation.
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "403":
+          description: 403 Forbidden. You don't have the right permissions to execute this operation.
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: 404 Not Found. The server cannot find the requested resource.
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "500":
+          description: 500 Internal Server Error. An error has occurred.
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "502":
+          description: 502 Bad Gateway. The service unable to get a valid response.
+          content:
+            application/json;charset=UTF-8:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+        - Movimiento
+      summary: Elimina el movimiento por id
+      description: |
+        ### Detalle:
+        Elimina el movimeinto por id
+         | Expected Result  | Path Parameter | Query Parameter                 |
+        | ---------------- | ------------   | -----------------------------------|
+        | Elimina un movimiento por id| - | movimientoId |
+      operationId: deleteMovimiento
+      parameters:
+        - name: movimientoId
+          in: path
+          description: Id del movimiento
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1234423
+      responses:
+        "200":
+          description: Movimiento eliminado satisfactoriamente
         "400":
           description: 400 Bad Request. The request information it's not correct.
           content:

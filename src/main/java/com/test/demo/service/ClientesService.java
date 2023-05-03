@@ -20,4 +20,6 @@ public interface ClientesService {
     Mono<Void> postCliente(Mono<PostClienteRequest> postClienteRequest);
 
     Mono<Void> putCliente(Mono<PutClienteRequest> putClienteRequest);
+
+    Mono<Void> deleteCliente(Long clienteId);
 }

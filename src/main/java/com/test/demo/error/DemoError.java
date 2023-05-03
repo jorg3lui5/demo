@@ -149,4 +149,77 @@ public class DemoError {
                     .developerMessage(DEVELOPER_MESSAGE_11),
             BAD_REQUEST.value(),
             BAD_REQUEST);
+
+    static final String USER_MESSAGE_12 = "Error al eliminar el registro, verifique el Id";
+    static final String DEVELOPER_MESSAGE_12 = "Registro no eliminado";
+
+    public  static final FailureException FE12_ELIMINACION_ERROR = new FailureException(
+            new Error()
+                    .errorCode("FE_12")
+                    .status(BigDecimal.valueOf(BAD_REQUEST.value()))
+                    .userMessage(USER_MESSAGE_12)
+                    .developerMessage(DEVELOPER_MESSAGE_12),
+            BAD_REQUEST.value(),
+            BAD_REQUEST);
+
+    static final String USER_MESSAGE_13 = "Error al actualizar el registro, verifique los datos";
+    static final String DEVELOPER_MESSAGE_13 = "Registro no actualizado";
+
+    public  static final FailureException FE13_ACTUALIZACION_ERROR = new FailureException(
+            new Error()
+                    .errorCode("FE_13")
+                    .status(BigDecimal.valueOf(BAD_REQUEST.value()))
+                    .userMessage(USER_MESSAGE_13)
+                    .developerMessage(DEVELOPER_MESSAGE_13),
+            BAD_REQUEST.value(),
+            BAD_REQUEST);
+
+    static final String USER_MESSAGE_14 = "Error al recuperar Los registros";
+    static final String DEVELOPER_MESSAGE_14 = "Registros no recuperados";
+
+    public  static final FailureException FE14_RECUPERAR_TODOS_ERROR = new FailureException(
+            new Error()
+                    .errorCode("FE_14")
+                    .status(BigDecimal.valueOf(BAD_REQUEST.value()))
+                    .userMessage(USER_MESSAGE_14)
+                    .developerMessage(DEVELOPER_MESSAGE_14),
+            BAD_REQUEST.value(),
+            BAD_REQUEST);
+
+    static final String USER_MESSAGE_15 = "Error al recuperar el registro, verifique el Id";
+    static final String DEVELOPER_MESSAGE_15 = "Registro no recuperado";
+
+    public  static final FailureException FE15_RECUPERAR_ERROR = new FailureException(
+            new Error()
+                    .errorCode("FE_15")
+                    .status(BigDecimal.valueOf(BAD_REQUEST.value()))
+                    .userMessage(USER_MESSAGE_15)
+                    .developerMessage(DEVELOPER_MESSAGE_15),
+            BAD_REQUEST.value(),
+            BAD_REQUEST);
+
+    static final String USER_MESSAGE_16 = "Error al guardar el registro, verifique los datos";
+    static final String DEVELOPER_MESSAGE_16 = "Registro no guardado";
+
+    public  static final FailureException FE16_GUARDAR_ERROR = new FailureException(
+            new Error()
+                    .errorCode("FE_16")
+                    .status(BigDecimal.valueOf(BAD_REQUEST.value()))
+                    .userMessage(USER_MESSAGE_16)
+                    .developerMessage(DEVELOPER_MESSAGE_16),
+            BAD_REQUEST.value(),
+            BAD_REQUEST);
+
+    static final String USER_MESSAGE_17 = "Método aún no implementado, lo implementaremos pronto";
+    static final String DEVELOPER_MESSAGE_17 = "Método no implementado";
+
+    public  static final FailureException FE17_METODO_NO_IMPLEMENTADO = new FailureException(
+            new Error()
+                    .errorCode("FE_17")
+                    .status(BigDecimal.valueOf(BAD_REQUEST.value()))
+                    .userMessage(USER_MESSAGE_17)
+                    .developerMessage(DEVELOPER_MESSAGE_17),
+            BAD_REQUEST.value(),
+            BAD_REQUEST);
+
 }

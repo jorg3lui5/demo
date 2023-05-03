@@ -36,29 +36,36 @@ public class MovimientosServiceImpl implements MovimientosService {
 
     @Override
     public Mono<GetMovimientoResponse> getMovimiento(Long movimientoId) {
+        log.info("Inicia obtención del movimiento por id. Id movimiento request: {}",movimientoId);
         return  getMovimientoEntityById(movimientoId)
                 .flatMap(movimientoEntity->
                         cuentasService.getCuenta(movimientoEntity.getCuentaId())
                         .map(getCuentaResponse ->
                                 movimientosMapper.entityToGetResponse(movimientoEntity, getCuentaResponse)
                         )
-                );
+                ).doOnSuccess(success->log.info("Movimiento recuperado correctamente"));
     }
 
     @Override
     public Flux<GetMovimientoResponse> getMovimientos() {
-        return null;
+        log.info("Inicia obtención de la lista de movimientos");
+        log.warn("Método no implementado");
+        throw  DemoError.FE17_METODO_NO_IMPLEMENTADO;
     }
 
     @Override
     public Mono<Void> patchMovimiento(Mono<PatchMovimientoRequest> patchMovimientoRequest) {
-        return null;
+        log.info("Inicia modificación de datos del movimiento");
+        log.debug("Datos de movimiento a modificar, request: {}", patchMovimientoRequest);
+        log.warn("Método no implementado");
+        throw  DemoError.FE17_METODO_NO_IMPLEMENTADO;
     }
 
     @Override
     public Mono<Void> postMovimiento(Mono<PostMovimientoRequest> postMovimientoRequest) {
         return postMovimientoRequest.flatMap(movimientoARealizar->
                     cuentasRepository.findById(movimientoARealizar.getCuentaId())
+                    .doOnError(error->log.error("Error al recuperar la cuenta a la que se realizar el movimiento, detalle: {}", error.getMessage()))
                     .switchIfEmpty(Mono.error(DemoError.FE08_NO_EXISTE_CUENTA_PARA_MOVIMIENTO))
                     .flatMap(cuentaEntity ->
                             permiteRealizarMovimiento(cuentaEntity.getSaldoInicial().doubleValue(), movimientoARealizar)
@@ -66,16 +73,36 @@ public class MovimientosServiceImpl implements MovimientosService {
                                     guardarMovimiento(cuentaEntity,movimientoARealizar)
                             )
                     )
-                ).then();
+                ).doOnSuccess(success->log.info("Movimiento guardado correctamente"))
+                .then();
     }
 
     @Override
     public Mono<Void> putMovimiento(Mono<PutMovimientoRequest> putMovimientoRequest) {
-        return null;
+        log.info("Inicia modificación de datos del movimiento");
+        log.debug("Movimiento a modificar, request: {}", putMovimientoRequest);
+        log.warn("Método no implementado");
+        throw  DemoError.FE17_METODO_NO_IMPLEMENTADO;
+    }
+
+    @Override
+    public Mono<Void> deleteMovimiento(Long movimientoId) {
+        log.info("Inicia la eliminación del movimiento. Id movimiento request: {}", movimientoId);
+        return getMovimientoEntityById(movimientoId)
+                .flatMap(movimientoEntity -> {
+                    movimientoEntity.setEstado(Boolean.FALSE);
+                    return movimientosRepository.save(movimientoEntity)
+                            .doOnError(error->log.error("Error al eliminar el movimiento, detalle: {}", error.getMessage()))
+                            .onErrorResume(error->Mono.error(DemoError.FE12_ELIMINACION_ERROR));
+                })
+                .doOnSuccess(success->log.info("Movimiento eliminado correctamente"))
+                .then();
     }
 
     private Mono<MovimientoEntity> getMovimientoEntityById(Long movimientoId) {
+        log.info("Devuelve movimiento por id: {}", movimientoId);
         return movimientosRepository.findByMovimientoId(movimientoId)
+                .doOnError(error->log.error("Error al recuperar el movimiento por id, detalle: {}", error.getMessage()))
                 .switchIfEmpty(Mono.error(DemoError.FE06_MOVIMIENTO_POR_ID_NO_ENCONTRADO));
     }
 
@@ -85,6 +112,7 @@ public class MovimientosServiceImpl implements MovimientosService {
                         if(Boolean.TRUE.equals(movimientoEntity.getFecha().isAfter(movimientoARealizar.getFecha()))){
                             return Mono.error(DemoError.FE09_FECHA_INVALIDA_MOVIMIENTO);
                         }
+                        log.info("fecha válida del movimiento");
                         return Mono.just(Boolean.TRUE);
                 })
                 .switchIfEmpty(Mono.just(Boolean.TRUE));
@@ -102,11 +130,13 @@ public class MovimientosServiceImpl implements MovimientosService {
                 && saldoDisponible.doubleValue()<movimientoARealizar.getValor().doubleValue()){
             return Mono.error(DemoError.FE10_VALOR_DEBITO_INVALIDO);
         }
+        log.info("Permite realizar el débito o crédito");
         return Mono.just(Boolean.TRUE);
     }
 
     private Mono<Void> guardarMovimiento(CuentaEntity cuentaEntity, PostMovimientoRequest movimientoARealizar) {
         return movimientosRepository.save(movimientosMapper.postRequestToEntity(movimientoARealizar, cuentaEntity.getSaldoInicial()))
+                .doOnError(error->log.error("Error al guardar el movimiento, detalle: {}", error.getMessage()))
                 .flatMap(movimientoEntity -> {
                     if(Objects.equals(movimientoARealizar.getTipo(),TipoMovimiento.CREDITO)){
                         cuentaEntity.setSaldoInicial(movimientoEntity.getSaldo().add(movimientoEntity.getValor()));
@@ -114,7 +144,8 @@ public class MovimientosServiceImpl implements MovimientosService {
                     else{
                         cuentaEntity.setSaldoInicial(movimientoEntity.getSaldo().subtract(movimientoEntity.getValor()));
                     }
-                    return cuentasRepository.save(cuentaEntity);
+                    return cuentasRepository.save(cuentaEntity)
+                            .doOnError(error->log.error("Error al actualizar el saldo de cuenta, detalle: {}", error.getMessage()));
                 }).then();
     }
 }

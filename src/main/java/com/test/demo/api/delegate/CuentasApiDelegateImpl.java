@@ -63,6 +63,15 @@ public class CuentasApiDelegateImpl implements CuentasApiDelegate {
     }
 
     @Override
+    public Mono<ResponseEntity<Void>> deleteCuenta(Long cuentaId,
+                                                    ServerWebExchange exchange) {
+
+        return cuentasService.deleteCuenta(cuentaId)
+                .map(ResponseEntity::ok);
+
+    }
+
+    @Override
     public Mono<ResponseEntity<Flux<ReporteCuentasClienteResponse>>> getReporteCuentasCLiente(Long clienteId,
                                                                                               LocalDate fechaInicio,
                                                                                               LocalDate fechaFin,

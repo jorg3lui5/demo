@@ -21,4 +21,7 @@ public interface MovimientosService {
     Mono<Void> postMovimiento(Mono<PostMovimientoRequest> postMovimientoRequest);
 
     Mono<Void> putMovimiento(Mono<PutMovimientoRequest> putMovimientoRequest);
+
+    Mono<Void> deleteMovimiento(Long movimientoId);
+
 }

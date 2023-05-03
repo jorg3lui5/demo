@@ -13,7 +13,6 @@ Nota: Con Docker se creó también una base de datos, para que la api se conecte
 
 Consumo de servicios
 - Para el consumo de servicios se tiene el contrato Open Api, donde se puede consumir dichos servicios. Estos archivos tienen los nombres openapi.yaml o openapi.json.
-Estos se puede mirar de la siguiente manera: 
  
 La ruta base de los servicios son: 
 http://localhost:8080/v1/test/
